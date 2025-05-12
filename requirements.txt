@@ -1,0 +1,16 @@
+Django==4.2.10
+django-tailwind==3.8.0
+django-widget-tweaks==1.5.0
+# Replace django-htmx==0.5.0 with the latest version
+django-htmx==1.23.0
+django-crispy-forms==2.1
+crispy-tailwind==0.5.0
+django-allauth==0.61.1
+djangorestframework==3.14.0
+mysqlclient==2.2.1
+pillow==10.2.0
+pandas==2.2.0
+matplotlib==3.8.2
+django-tables2==2.7.0
+django-filter==23.5
+django-chartjs==2.3.0

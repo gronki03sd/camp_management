@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de bord - Camp de Vacances{% endblock %}
+
+{% block page_title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<!-- Statistics Cards -->
+<div class="grid grid-cols-1 gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="p-6 bg-white rounded-md shadow-md">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-3xl font-semibold text-gray-700">{{ total_participants }}</h3>
+                <p class="text-gray-600">Participants</p>
+            </div>
+            <div class="p-3 bg-indigo-600 rounded-full">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-6">
+            <p class="text-sm text-gray-600">
+                <span class="{% if participant_growth_rate >= 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                    {% if participant_growth_rate >= 0 %}+{% endif %}{{ participant_growth_rate|floatformat:1 }}%
+                </span>
+                depuis la semaine dernière
+            </p>
+            <p class="text-xs text-gray-500">{{ new_participants_week }} nouveaux cette semaine</p>
+        </div>
+    </div>
+
+    <div class="p-6 bg-white rounded-md shadow-md">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-3xl font-semibold text-gray-700">{{ total_activities }}</h3>
+                <p class="text-gray-600">Activités</p>
+            </div>
+            <div class="p-3 bg-green-600 rounded-full">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-6">
+            <p class="text-sm text-gray-600">
+                {{ activities_this_week }} activités cette semaine
+            </p>
+            <p class="text-xs text-gray-500">{{ full_activities }} activités complètes</p>
+        </div>
+    </div>
+
+    <div class="p-6 bg-white rounded-md shadow-md">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-3xl font-semibold text-gray-700">{{ total_staff }}</h3>
+                <p class="text-gray-600">Personnel</p>
+            </div>
+            <div class="p-3 bg-yellow-600 rounded-full">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="mt-6">
+            <a href="{% url 'staff:list' %}" class="text-sm text-indigo-600 hover:underline">
+                Voir l'équipe
+            </a>
+        </div>
+    </div>
+
+    <div id="quick-actions" class="p-6 bg-white rounded-md shadow-md">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-gray-700">Actions rapides</h3>
+        </div>
+        <div class="space-y-2">
+            <a href="{% url 'participants:add' %}" class="flex items-center px-3 py-2 text-sm text-indigo-600 transition-colors duration-200 rounded-lg hover:bg-indigo-100">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                </svg>
+                Ajouter un participant
+            </a>
+            <a href="{% url 'activities:add' %}" class="flex items-center px-3 py-2 text-sm text-indigo-600 transition-colors duration-200 rounded-lg hover:bg-indigo-100">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Créer une activité
+            </a>
+            <a href="{% url 'activities:inscription_add' %}" class="flex items-center px-3 py-2 text-sm text-indigo-600 transition-colors duration-200 rounded-lg hover:bg-indigo-100">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                Inscrire à une activité
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="grid grid-cols-1 gap-6 mb-8 lg:grid-cols-2">
+    <div class="p-4 bg-white rounded-md shadow-md">
+        <h4 class="mb-4 text-lg font-semibold text-gray-700">Évolution des inscriptions</h4>
+        <div>
+            <div class="flex mb-2 space-x-2">
+                <button class="px-2 py-1 text-xs font-medium text-indigo-600 bg-indigo-100 rounded-md participants-chart-period" data-period="week">7 jours</button>
+                <button class="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-md participants-chart-period" data-period="month">30 jours</button>
+                <button class="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-md participants-chart-period" data-period="year">Année</button>
+            </div>
+            <div class="relative" style="height: 300px;">
+                <canvas id="participants-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="p-4 bg-white rounded-md shadow-md">
+        <h4 class="mb-4 text-lg font-semibold text-gray-700">Top des activités</h4>
+        <div class="relative" style="height: 300px;">
+            <canvas id="activities-chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity and Upcoming Activities -->
+<div class="grid grid-cols-1 gap-6 mb-8 lg:grid-cols-2">
+    <!-- Recent Registrations -->
+    <div class="p-4 bg-white rounded-md shadow-md">
+        <h4 class="mb-4 text-lg font-semibold text-gray-700">Inscriptions récentes</h4>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Participant</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Activité</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Date</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for inscription in recent_registrations %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">{{ inscription.participant.get_full_name }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ inscription.activite.nom }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-500">{{ inscription.date_inscription|date:"d/m/Y H:i" }}</div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="px-6 py-4 text-center text-sm text-gray-500">
+                                Aucune inscription récente
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4 text-right">
+            <a href="{% url 'activities:inscription_list' %}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                Voir toutes les inscriptions →
+            </a>
+        </div>
+    </div>
+    
+    <!-- Upcoming Activities -->
+    <div class="p-4 bg-white rounded-md shadow-md">
+        <h4 class="mb-4 text-lg font-semibold text-gray-700">Activités à venir</h4>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Activité</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Date</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Responsable</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for activity in upcoming_activities %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ activity.nom }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-500">{{ activity.date_debut|date:"d/m/Y H:i" }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ activity.responsable.get_full_name }}</div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="px-6 py-4 text-center text-sm text-gray-500">
+                                Aucune activité prévue prochainement
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4 text-right">
+            <a href="{% url 'activities:list' %}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                Voir toutes les activités →
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Materials Chart -->
+<div class="p-4 mb-8 bg-white rounded-md shadow-md">
+    <h4 class="mb-4 text-lg font-semibold text-gray-700">Inventaire de matériel</h4>
+    <div class="relative" style="height: 300px;">
+        <canvas id="materials-chart"></canvas>
+    </div>
+    <div class="mt-4 text-right">
+        <a href="{% url 'infrastructure:materiel_list' %}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+            Voir tout le matériel →
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Participants chart
+        const participantsCtx = document.getElementById('participants-chart').getContext('2d');
+        let participantsChart;
+        
+        // Function to load participants chart data
+        function loadParticipantsChart(period = 'week') {
+            fetch(`{% url 'dashboard:participants_chart' %}?period=${period}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (participantsChart) {
+                        participantsChart.destroy();
+                    }
+                    
+                    participantsChart = new Chart(participantsCtx, {
+                        type: 'line',
+                        data: data,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        precision: 0
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+        }
+        
+        // Initial load
+        loadParticipantsChart();
+        
+        // Period buttons
+        document.querySelectorAll('.participants-chart-period').forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active button
+                document.querySelectorAll('.participants-chart-period').forEach(btn => {
+                    btn.classList.remove('text-indigo-600', 'bg-indigo-100');
+                    btn.classList.add('text-gray-600', 'bg-gray-100');
+                });
+                this.classList.remove('text-gray-600', 'bg-gray-100');
+                this.classList.add('text-indigo-600', 'bg-indigo-100');
+                
+                // Load chart with selected period
+                loadParticipantsChart(this.dataset.period);
+            });
+        });
+        
+        // Activities chart
+        const activitiesCtx = document.getElementById('activities-chart').getContext('2d');
+        fetch('{% url 'dashboard:activities_chart' %}')
+            .then(response => response.json())
+            .then(data => {
+                new Chart(activitiesCtx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.raw + ' unités';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+    });
+</script>
+{% endblock %}}
+                    }
+                });
+            });
+            
+        // Materials chart
+        const materialsCtx = document.getElementById('materials-chart').getContext('2d');
+        fetch('{% url 'dashboard:materials_chart' %}')
+            .then(response => response.json())
+            .then(data => {
+                new Chart(materialsCtx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }

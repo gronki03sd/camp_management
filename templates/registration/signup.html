@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Inscription - Camp de Vacances{% endblock %}
+
+{% block extra_head %}
+<style>
+    .signup-container {
+        min-height: calc(100vh - 200px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center signup-container">
+    <div class="w-full max-w-md">
+        <div class="px-8 pt-6 pb-8 mb-4 bg-white rounded-lg shadow-lg">
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-bold text-gray-800">Créer un compte</h2>
+                <p class="text-sm text-gray-600">Rejoignez-nous pour gérer le camp de vacances</p>
+            </div>
+
+            <form method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="px-4 py-3 mb-6 text-red-700 bg-red-100 rounded-md">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-bold text-gray-700" for="id_email">
+                        Email
+                    </label>
+                    {{ form.email|as_crispy_field }}
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-bold text-gray-700" for="id_password1">
+                        Mot de passe
+                    </label>
+                    {{ form.password1|as_crispy_field }}
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block mb-2 text-sm font-bold text-gray-700" for="id_password2">
+                        Confirmer le mot de passe
+                    </label>
+                    {{ form.password2|as_crispy_field }}
+                </div>
+
+                <div class="flex items-center justify-between mb-4">
+                    <button class="px-4 py-2 font-bold text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:shadow-outline" type="submit">
+                        S'inscrire
+                    </button>
+                    <a class="inline-block text-sm font-semibold text-indigo-600 align-baseline hover:text-indigo-800" href="{% url 'account_login' %}">
+                        Déjà inscrit? Connexion
+                    </a>
+                </div>
+                
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
